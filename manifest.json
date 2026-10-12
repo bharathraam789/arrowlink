@@ -1,0 +1,11 @@
+{
+  "name": "The Arrow Link Lead Tracker",
+  "short_name": "Arrow Leads",
+  "description": "Field lead capture and follow-up tracking for The Arrow Link",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#090909",
+  "theme_color": "#080808",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

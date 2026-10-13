@@ -185,6 +185,39 @@ function saveSettings(){localStorage.setItem(SETTINGS,JSON.stringify({businessNa
 function loadSettings(){try{const s=JSON.parse(localStorage.getItem(SETTINGS)||'{}');if(s.businessName)document.getElementById('businessName').value=s.businessName;if(s.businessPhone)document.getElementById('businessPhone').value=s.businessPhone}catch(e){}}
 async function enableNotifications(){if(!('Notification'in window))return alert('This browser does not support notifications.');const p=await Notification.requestPermission();if(p==='granted'){new Notification('The Arrow Link CRM',{body:'Browser notifications are enabled. Keep the CRM open to check follow-ups.'});alert('Notifications enabled. The dashboard will still show due follow-ups.')}else alert('Notification permission was not granted.')}
 resetForm();loadSettings();renderAll();init();
+  
+/* Auto-refresh leads every 30 seconds */
+let autoSyncRunning = false;
+
+async function autoRefreshLeads() {
+  if (
+    !client ||
+    !currentUser ||
+    busy ||
+    autoSyncRunning ||
+    document.visibilityState !== 'visible'
+  ) return;
+
+  autoSyncRunning = true;
+  try {
+    await syncFromCloud(false);
+  } catch (error) {
+    console.warn('Automatic sync failed:', error);
+  } finally {
+    autoSyncRunning = false;
+  }
+}
+
+setInterval(autoRefreshLeads, 30000);
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    autoRefreshLeads();
+  }
+});
+
+window.addEventListener('focus', autoRefreshLeads);
+
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
 </body></html>

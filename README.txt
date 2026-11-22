@@ -1,34 +1,41 @@
-THE ARROW LINK — LEAD GENERATION & TRACKING APP
+THE ARROW LINK — PREMIUM CRM V2 (BLACK & GOLD)
 ================================================
 
-WHAT IS INCLUDED
-- Field lead form (contact, company, phone, industry, service, status, value, location, notes)
-- Search and status filters
-- Dashboard: total leads, this-month leads, follow-ups due, won leads
-- Follow-up date tracking and WhatsApp message shortcut
-- Daily and monthly reports, status counts
-- CSV export and JSON backup/restore
-- Installable PWA shell and basic offline app caching
+ACTIVE APPLICATION
+- index.html is the upgraded Premium CRM V2 application.
+- Uses the existing Supabase browser client, email/password authentication and leads table.
+- Keeps the existing lead create, edit, delete, search, status filter, WhatsApp shortcut,
+  CSV export, JSON backup/restore, cloud sync and PWA shell.
 
-IMPORTANT DATA LIMITATION
-This first version saves lead data in the browser's localStorage on the current device/browser. It does not sync automatically between devices and it does not send push notifications. Follow-up reminders are displayed in the dashboard when you open the app. Download JSON backups regularly. For cloud sync, multiple users, secure login and actual scheduled notifications, a database/backend is required.
+PREMIUM V2 INTERFACE
+- Black and gold responsive layout with desktop sidebar and mobile navigation.
+- Dashboard KPIs, six-month lead trend, status distribution, open pipeline value and win rate.
+- Customers view groups records by company name from existing leads.
+- Pipeline view groups leads by the existing lead status values.
+- Follow-ups view lists scheduled active follow-ups and allows editing/rescheduling.
+- Activities view is a derived timeline from lead created/updated timestamps and notes;
+  it is not a separate activity-log database table.
+- Team / Users is an informational setup screen only. Team invitations, roles and
+  permission management are NOT implemented because no team/profile schema was supplied.
 
-HOW TO TEST LOCALLY
-Open index.html in a modern browser. Some PWA features (install/offline) require HTTPS hosting.
+SUPABASE AND DATA SAFETY
+- The upgrade does not run SQL migrations or change the Supabase schema.
+- Existing lead CRUD and Supabase configuration are retained from the supplied index.html.
+- The app expects a leads table with the columns already used by the original application,
+  plus appropriate Row Level Security (RLS) policies.
+- A browser publishable key is not a substitute for RLS. Never place a Supabase secret/service
+  role key in this public repository.
+- Download a JSON backup before deployment. Test sign-in, read, create, edit, delete,
+  CSV export and backup/restore in the development branch before merging to main.
 
-FREE HOSTING OPTION (STATIC SITE)
+DEPLOYMENT
 1. Extract this ZIP.
-2. Create a GitHub account if you don't have one.
-3. Create a new public repository named arrow-link-leads.
-4. Upload index.html, manifest.json, sw.js, icon.svg and README.txt to the repository root.
-5. In the repository, open Settings > Pages.
-6. Under Build and deployment, choose Deploy from a branch; select main and /(root), then Save.
-7. Wait for GitHub Pages to publish. Open the URL shown in Settings > Pages.
-8. On iPhone: open the published URL in Safari > Share > Add to Home Screen.
-   On Android: open the URL in Chrome > menu > Install app / Add to Home screen.
+2. In GitHub, open the arrowlink repository and select crm-v2-development.
+3. Upload/replace the updated index.html and README.txt in the repository root.
+4. Keep arrow-logo.png, icon.svg, manifest.json, sw.js and CNAME in the root.
+5. Wait for GitHub Pages to deploy, then test the development URL.
+6. Only after successful testing, create a pull request from crm-v2-development to main.
 
-CUSTOM DOMAIN
-You can later connect a subdomain such as leads.thearrowlink.com in GitHub Pages settings and add the DNS records shown by GitHub. Do not change your main website's DNS records unless you understand the impact.
-
-SECURITY
-This version has no login. Anyone who can open the hosted URL can use the app, but each browser has separate local data. Do not store sensitive personal information in an unsecured/shared device. For business use across devices, the next step is a hosted database, login and access rules.
+OTHER HTML FILES
+- index-supabase-ready-v3.html and index-supabase-test.html are retained as reference/test files.
+- GitHub Pages serves index.html by default.

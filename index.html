@@ -68,32 +68,60 @@ footer{padding:28px;color:#777}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
 <div id="authScreen" class="auth-wrap">
   <div class="auth-card">
+
     <div class="brand">
-  <div class="logo">
-    <img src="arrow-logo.png" alt="THE ARROW LINK Logo">
-  </div>
-  <div>
-    <h1>THE ARROW LINK</h1>
-    <p>SECURE LEAD TRACKER</p>
-  </div>
-</div>
-    <h2 style="margin-top:22px">Sign in to your CRM</h2>
-    <p>Use the email and password for the user you created in Supabase.</p>
-    <form id="loginForm">
-      <label for="loginEmail">Email address</label><input id="loginEmail" type="email" autocomplete="username" required value="bharathraam789@gmail.com">
-      <label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" required>
-      <button class="primary" type="submit" id="loginButton">Sign in</button>
-      <p id="authMessage" role="status"></p>
+      <div class="logo">
+        <img src="arrow-logo.png" alt="THE ARROW LINK Logo">
+      </div>
+      <div>
+        <h1>THE ARROW LINK</h1>
+        <p>SECURE LEAD TRACKER</p>
+      </div>
+    </div>
+
+    <div id="loginSection">
+      <h2 style="margin-top:22px">Sign in to your CRM</h2>
+      <p>Use your registered Supabase email and password.</p>
+
+      <form id="loginForm">
+        <label for="loginEmail">Email address</label>
+        <input id="loginEmail" type="email"
+          autocomplete="username" required>
+
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password"
+          autocomplete="current-password" required>
+
+        <button class="primary" type="submit" id="loginButton">
+          Sign in
+        </button>
+
+        <p id="authMessage" role="status"></p>
+      </form>
+    </div>
+    <form id="resetPasswordForm" class="hidden">
+      <h2>Set New Password</h2>
+      <p>Enter your new CRM password.</p>
+      <label for="newPassword">New Password</label>
+      <input type="password" id="newPassword"
+        minlength="8" required placeholder="Enter new password">
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword"
+        minlength="8" required placeholder="Confirm new password">
+      <button type="submit">Update Password</button>
+      <p id="resetMessage" role="status"></p>
     </form>
   </div>
 </div>
+
 <header><div class="topbar"><div class="brand"><div class="logo"><img src="arrow-logo.png" alt="THE ARROW LINK"></div><div><h1>THE ARROW LINK</h1><p>NETWORKS | SECURITY | COMMUNICATIONS</p></div><span class="pill">CRM V2</span></div><div class="top-actions"><div class="statusline"><span class="dot"></span><span id="cloudStatus" class="small">Connecting…</span></div><button id="logoutButton" class="small" type="button">Sign out</button></div></div></header>
 <main><div class="notice" id="notice">Your cloud CRM is ready. Keep regular JSON backups of your lead records.</div>
 <div class="app-layout"><aside class="sidebar"><div class="nav-caption">WORKSPACE</div><nav class="tabs" aria-label="Main navigation">
 <button class="tab active" data-view="dashboard">◈ &nbsp; Dashboard</button><button class="tab" data-view="leads">▤ &nbsp; Leads</button><button class="tab" data-view="customers">♙ &nbsp; Customers</button><button class="tab" data-view="pipeline">▥ &nbsp; Pipeline</button><button class="tab" data-view="followups">◷ &nbsp; Follow-ups</button><button class="tab" data-view="activities">☷ &nbsp; Activities</button><button class="tab" data-view="add">＋ &nbsp; Add Lead</button>
-<div class="nav-caption">INSIGHTS & ADMIN</div><button class="tab" data-view="reports">▥ &nbsp; Reports</button><button class="tab" data-view="team">♧ &nbsp; Team / Users</button><button class="tab" data-view="settings">⚙ &nbsp; Settings & Backup</button></nav></aside>
+<div class="nav-caption">INSIGHTS & ADMIN</div><button class="tab" data-view="reports">▥ &nbsp; Reports</button><button id="teamTab" class="tab" data-view="team">♧ &nbsp; Team / Users</button><button id="settingsTab" class="tab" data-view="settings">⚙ &nbsp; Settings & Backup</button></nav></aside>
 <div class="workspace"><div class="welcome"><div><h2>Welcome back, <span id="welcomeName">there</span> 👋</h2><p>Here’s what’s happening with your business today.</p></div><div class="welcome-actions"><button class="primary" onclick="showView('add')">＋ Add Lead</button></div></div>
 <div class="stats"><div class="stat"><span>Total Leads</span><strong id="statTotal">0</strong></div><div class="stat"><span>New This Month</span><strong id="statMonth">0</strong></div><div class="stat"><span>Follow-ups Due</span><strong id="statDue">0</strong></div><div class="stat"><span>Won Leads</span><strong id="statWon">0</strong></div></div>
 <section id="view-dashboard"><div class="panel-grid"><div class="card"><div class="sectionhead"><h2>Lead overview</h2><span class="pill">CURRENT RECORDS</span></div><div id="leadTrend" class="mini-bars"></div><div class="kpi-inline" style="margin-top:13px"><span id="pipelineValue">Pipeline value: ₹0</span><span id="winRate">Win rate: 0%</span></div></div><div class="card"><div class="sectionhead"><h2>Leads by status</h2></div><div id="dashboardStatus"></div></div></div><div class="two"><div class="card"><div class="sectionhead"><h2>Follow-ups due</h2><button class="small" onclick="showView('followups')">View all →</button></div><div id="dueList"></div></div><div class="card"><div class="sectionhead"><h2>Recent leads</h2><button class="small" onclick="showView('add')">＋ Add</button></div><div id="recentList"></div></div></div></section>
@@ -140,11 +168,11 @@ footer{padding:28px;color:#777}
 </div></div><footer>THE ARROW LINK · PREMIUM CRM V2 · BLACK & GOLD EDITION</footer></main>
 <script>
 /* Set your Supabase Project URL and Publishable key here. Never use an sb_secret_ key. */
-const SUPABASE_URL='https://ytninxlivopryiyjpoej.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY='sb_publishable_mCl6DCevfskLAUz1CBd-lg_8jlY6E9a';
+const SUPABASE_URL='https://uotfuhtncbomyrewdhqy.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_Fd6ikhMadS9ks_vM-ZkNvw_CHc6TFhr';
 const KEY='arrowlink_leads_v1', SETTINGS='arrowlink_settings_v1';
 const localSupabase=window.supabase;
-let client=null, currentUser=null, leads=[], busy=false;
+let client=null, currentUser=null, currentRole='employee', leads=[], busy=false;
 function localLeads(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
 function saveLocal(){localStorage.setItem(KEY,JSON.stringify(leads))}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -161,9 +189,33 @@ async function init(){
  if(!localSupabase?.createClient){showAuth('Could not load the Supabase client library. Check your internet connection and reload.');status('Client library unavailable',true);return}
  if(SUPABASE_PUBLISHABLE_KEY==='PASTE_YOUR_SB_PUBLISHABLE_KEY_HERE'||!SUPABASE_PUBLISHABLE_KEY.startsWith('sb_publishable_')){showAuth('Setup needed: edit index.html and replace PASTE_YOUR_SB_PUBLISHABLE_KEY_HERE with your Supabase publishable key.');status('Key not configured',true);return}
  client=localSupabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
- client.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){currentUser=null;leads=[];showAuth('You have signed out.')}});
- const {data,error}=await client.auth.getSession();if(error){showAuth(error.message);return}
- if(data.session) await onSignedIn(data.session.user); else showAuth();
+
+client.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'PASSWORD_RECOVERY') {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('resetPasswordForm').classList.remove('hidden');
+        return;
+    }
+
+    if (event === 'SIGNED_OUT') {
+        currentUser = null;
+        leads = [];
+        showAuth('You have signed out.');
+    }
+
+    const { data, error } = await client.auth.getSession();
+    if (error) {
+        showAuth(error.message);
+        return;
+    }
+
+    if (data.session) {
+        await onSignedIn(data.session.user);
+    } else {
+        showAuth();
+    }
+});
+
 }
 document.getElementById('loginForm').addEventListener('submit',async e=>{
  e.preventDefault();if(!client){document.getElementById('authMessage').textContent='Supabase is not configured yet. Add the publishable key in index.html.';return}
@@ -174,7 +226,18 @@ document.getElementById('loginForm').addEventListener('submit',async e=>{
  await onSignedIn(data.user);
 });
 document.getElementById('logoutButton').addEventListener('click',async()=>{if(client)await client.auth.signOut()});
-async function onSignedIn(user){currentUser=user;hideAuth();document.getElementById('signedInEmail').textContent=user.email||'';document.getElementById('welcomeName').textContent=(user.email||'there').split('@')[0];status('Syncing cloud…');try{const {data,error}=await client.from('leads').select('*').order('created_at',{ascending:false});if(error)throw error;leads=(data||[]).map(mapFromDB);if(leads.length===0){const local=localLeads();if(local.length){const yes=confirm(`Your cloud account has no leads. Import ${local.length} lead(s) from this browser now? Your local copy will be kept.`);if(yes)await importRecords(local);else setNotice('Cloud is empty. Your local browser backup remains untouched. Use Settings → Import local browser leads when ready.')}}await syncFromCloud(false);loadSettings();renderAll();setNotice('Connected to Supabase. Changes are saved to your signed-in cloud account. Keep downloading backups regularly.');status('Cloud connected')}catch(err){status('Cloud error',true);setNotice('Could not load cloud leads: '+(err.message||String(err))+' Check that RLS policies and table columns are configured.',true)}}
+async function onSignedIn(user){currentUser=user;const { data: member, error: roleError } = await client
+  .from('crm_team_members')
+  .select('role')
+  .eq('user_id', user.id)
+  .single();
+
+if (roleError) throw roleError;
+
+currentRole = member.role;
+document.getElementById('teamTab').style.display = currentRole === 'owner' ? '' : 'none';
+document.getElementById('settingsTab').style.display = currentRole === 'owner' ? '' : 'none';
+hideAuth();document.getElementById('signedInEmail').textContent=user.email||'';document.getElementById('welcomeName').textContent=(user.email||'there').split('@')[0];status('Syncing cloud…');try{const {data,error}=await client.from('leads').select('*').order('created_at',{ascending:false});if(error)throw error;leads=(data||[]).map(mapFromDB);if(leads.length===0){const local=localLeads();if(local.length){const yes=confirm(`Your cloud account has no leads. Import ${local.length} lead(s) from this browser now? Your local copy will be kept.`);if(yes)await importRecords(local);else setNotice('Cloud is empty. Your local browser backup remains untouched. Use Settings → Import local browser leads when ready.')}}await syncFromCloud(false);loadSettings();renderAll();setNotice('Connected to Supabase. Changes are saved to your signed-in cloud account. Keep downloading backups regularly.');status('Cloud connected')}catch(err){status('Cloud error',true);setNotice('Could not load cloud leads: '+(err.message||String(err))+' Check that RLS policies and table columns are configured.',true)}}
 async function importRecords(records){
  if(!currentUser)throw new Error('Sign in before importing records.');
  if(!Array.isArray(records))throw new Error('Backup does not contain a valid leads list.');
@@ -223,9 +286,44 @@ function renderActivities(){const arr=leads.slice().sort((a,b)=>(b.updatedAt||b.
 function resetForm(){document.getElementById('leadForm').reset();document.getElementById('editId').value='';document.getElementById('formTitle').textContent='Add a new lead';document.getElementById('nextDate').value=today();document.getElementById('visitDate').value=today()}
 document.getElementById('leadForm').addEventListener('submit',async e=>{e.preventDefault();if(busy)return;busy=true;const btn=document.getElementById('saveLeadButton');btn.disabled=true;try{const id=val('editId');const old=leads.find(x=>x.id===id);const item={id:id||('L'+Date.now()),customer:val('customer'),company:val('company'),phone:val('phone'),email:val('email'),industry:val('industry'),service:val('service'),source:val('source'),status:val('status'),value:Number(val('value')||0),nextDate:val('nextDate'),city:val('city'),visitDate:val('visitDate')||today(),notes:val('notes'),createdAt:old?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};await upsertLead(item);await syncFromCloud(false);resetForm();showView('leads');setNotice('Lead saved to Supabase successfully.')}catch(err){alert('Could not save to cloud: '+err.message+' Your changes were not confirmed as saved.')}finally{busy=false;btn.disabled=false}});
 function editLead(id){const x=leads.find(a=>a.id===id);if(!x)return;showView('add');document.getElementById('formTitle').textContent='Edit lead';for(const k of ['customer','company','phone','email','industry','service','source','status','value','nextDate','city','visitDate','notes'])document.getElementById(k).value=x[k]??'';document.getElementById('editId').value=x.id;window.scrollTo({top:0,behavior:'smooth'})}
-async function deleteLead(id){const x=leads.find(a=>a.id===id);if(!x||!confirm('Delete this lead permanently from the cloud?'))return;try{let q=client.from('leads').delete().eq('owner_id',currentUser.id);if(x._dbid)q=q.eq('id',x._dbid);else q=q.eq('legacy_id',String(id));const {error}=await q;if(error)throw error;await syncFromCloud(false);setNotice('Lead deleted from cloud.')}catch(e){alert('Could not delete lead: '+e.message)}}
+
+async function deleteLead(id) {
+  const x = leads.find(a => a.id === id);
+
+  if (!x || !currentUser) return;
+
+  if (currentRole !== 'owner') {
+    alert('Access denied: Only Owners can delete leads.');
+    return;
+  }
+
+  if (!confirm('Delete this lead permanently from the cloud?')) {
+    return;
+  }
+
+  try {
+    let q = client
+      .from('leads')
+      .delete()
+      .eq('id', x._dbid);
+
+    const { data, error } = await q.select('id');
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      throw new Error('No lead was deleted. Check your permissions.');
+    }
+
+    await syncFromCloud(false);
+    setNotice('Lead deleted successfully.');
+
+  } catch (e) {
+    alert('Could not delete lead: ' + e.message);
+  }
+}
 function waLink(x){let n=(x.phone||'').replace(/\D/g,'');if(n.length===10)n='91'+n;return 'https://wa.me/'+n+'?text='+encodeURIComponent('Hello '+x.customer+', this is The Arrow Link. Following up regarding '+x.service+'. Please let me know a convenient time to discuss.')}
-function leadHTML(x){return `<article class="lead"><div class="leadtop"><div><h3>${esc(x.customer)} <span class="muted">· ${esc(x.company)}</span></h3><p>☎ ${esc(x.phone)} ${x.city?' · '+esc(x.city):''}</p></div><span class="pill">${esc(x.status)}</span></div><p>${esc(x.industry)} · ${esc(x.service)}</p><p>Next follow-up: <b style="color:${x.nextDate&&x.nextDate<today()?'#ff9b9b':'#e8d6a6'}">${esc(x.nextDate||'Not set')}</b> · Value: ₹${Number(x.value||0).toLocaleString('en-IN')}</p>${x.notes?`<p>${esc(x.notes)}</p>`:''}<div class="actions"><button onclick="editLead('${esc(x.id)}')">Edit</button><button onclick="window.open('${waLink(x)}','_blank','noopener')">WhatsApp</button><button onclick="markDone('${esc(x.id)}')">Follow-up done</button><button class="danger" onclick="deleteLead('${esc(x.id)}')">Delete</button></div></article>`}
+function leadHTML(x){return `<article class="lead"><div class="leadtop"><div><h3>${esc(x.customer)} <span class="muted">· ${esc(x.company)}</span></h3><p>☎ ${esc(x.phone)} ${x.city?' · '+esc(x.city):''}</p></div><span class="pill">${esc(x.status)}</span></div><p>${esc(x.industry)} · ${esc(x.service)}</p><p>Next follow-up: <b style="color:${x.nextDate&&x.nextDate<today()?'#ff9b9b':'#e8d6a6'}">${esc(x.nextDate||'Not set')}</b> · Value: ₹${Number(x.value||0).toLocaleString('en-IN')}</p>${x.notes?`<p>${esc(x.notes)}</p>`:''}<div class="actions"><button onclick="editLead('${esc(x.id)}')">Edit</button><button onclick="window.open('${waLink(x)}','_blank','noopener')">WhatsApp</button><button onclick="markDone('${esc(x.id)}')">Follow-up done</button>${currentRole === 'owner' ? `<button class="danger" onclick="deleteLead('${esc(x.id)}')">Delete</button>` : ''}</div></article>`}
 async function markDone(id){const x=leads.find(a=>a.id===id);if(!x)return;const d=prompt('Enter next follow-up date (YYYY-MM-DD)',today());if(d===null)return;if(d&&!/^\d{4}-\d{2}-\d{2}$/.test(d)){alert('Use YYYY-MM-DD format.');return}const old=x.nextDate;x.nextDate=d;x.updatedAt=new Date().toISOString();try{await upsertLead(x);await syncFromCloud(false)}catch(e){x.nextDate=old;alert('Could not update follow-up: '+e.message)}}
 function renderLeads(){const q=(document.getElementById('search')?.value||'').toLowerCase(),st=document.getElementById('filterStatus')?.value||'';const arr=leads.filter(x=>(!st||x.status===st)&&[x.customer,x.company,x.phone,x.city,x.service,x.industry].join(' ').toLowerCase().includes(q)).sort((a,b)=>(a.nextDate||'9999').localeCompare(b.nextDate||'9999'));document.getElementById('leadList').innerHTML=arr.length?arr.map(leadHTML).join(''):'<div class="empty">No leads found. Tap “Add Lead” to record your first customer.</div>'}
 function renderAll(){const due=leads.filter(x=>x.nextDate&&x.nextDate<=today()&&!['Won','Lost'].includes(x.status));document.getElementById('statTotal').textContent=leads.length;document.getElementById('statMonth').textContent=leads.filter(x=>(x.visitDate||'').startsWith(monthNow())).length;document.getElementById('statDue').textContent=due.length;document.getElementById('statWon').textContent=leads.filter(x=>x.status==='Won').length;document.getElementById('dueList').innerHTML=due.length?due.slice(0,5).map(leadHTML).join(''):'<div class="empty">No follow-ups due today.</div>';document.getElementById('recentList').innerHTML=leads.length?leads.slice(0,5).map(leadHTML).join(''):'<div class="empty">Your leads will appear here.</div>';renderLeads();renderReports();renderPremiumDashboard();renderCustomers();renderPipeline();renderFollowups();renderActivities()}
@@ -275,5 +373,36 @@ document.addEventListener('visibilitychange', () => {
 window.addEventListener('focus', autoRefreshLeads);
 
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const newPassword = document.getElementById('newPassword').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  const message = document.getElementById('resetMessage');
+
+  if (newPassword !== confirmPassword) {
+    message.textContent = 'Passwords do not match.';
+    return;
+  }
+
+  if (newPassword.length < 8) {
+    message.textContent = 'Password must be at least 8 characters.';
+    return;
+  }
+
+  const { error } = await client.auth.updateUser({
+    password: newPassword
+  });
+
+  if (error) {
+    message.textContent = error.message;
+    return;
+  }
+
+  message.textContent = 'Password updated successfully. Please sign in.';
+  document.getElementById('resetPasswordForm').classList.add('hidden');
+  document.getElementById('loginForm').classList.remove('hidden');
+});
 </script>
 </body></html>
